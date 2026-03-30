@@ -26,7 +26,7 @@ The Gateway uses an atomic **Lua script in Redis** to enforce a 1,000-request bu
 # Run benchmark with 10,000 requests
 python3 load_test.py
 ```
-**Result**: ~1,210 requests pass (Green on Dashboard), while ~8,790 requests are mitigated with **HTTP 429 Too Many Requests**. Additionally, 100 requests are blocked with **HTTP 401 Unauthorized**.
+**Result**: ~1,210 requests pass, while ~8,790 requests are mitigated with **HTTP 429 Too Many Requests**. Additionally, 100 requests are blocked with **HTTP 401 Unauthorized**.
 
 ### C. Performance Benchmarking
 Verified stable throughput of **4,000+ Requests Per Second** (sustained) with sub-millisecond local processing latency.
