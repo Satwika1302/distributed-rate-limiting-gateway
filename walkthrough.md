@@ -26,7 +26,7 @@ The Gateway uses an atomic **Lua script in Redis** to enforce a 1,000-request bu
 # Run benchmark with 10,000 requests
 python3 load_test.py
 ```
-**Result**: ~1,210 requests pass (Green on Dashboard), while ~8,790 requests are mitigated with **HTTP 429 Too Many Requests** (Red on Dashboard). Additionally, 100 requests are blocked with **HTTP 401 Unauthorized** (Yellow on Dashboard).
+**Result**: ~1,210 requests pass (Green on Dashboard), while ~8,790 requests are mitigated with **HTTP 429 Too Many Requests**. Additionally, 100 requests are blocked with **HTTP 401 Unauthorized** (Yellow on Dashboard).
 
 ### C. Performance Benchmarking
 Verified stable throughput of **4,000+ Requests Per Second** (sustained) with sub-millisecond local processing latency.
@@ -34,7 +34,6 @@ Verified stable throughput of **4,000+ Requests Per Second** (sustained) with su
 ## 3. Observability Dashboard
 Access the real-time visualization at http://localhost:5173.
 
-![Distributed Rate Limiting Gateway Console](file:/Users/satwikad/Desktop/Screenshot 2026-03-30 at 1.24.57 PM.png)
+![Distributed Rate Limiting Gateway Console](./screenshot.png)
 
----
-**Final Status**: System stabilized, benchmarked at 5,000+ RPS, and ready for GitHub release.
+
