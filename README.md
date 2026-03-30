@@ -9,6 +9,7 @@ This is a high-performance API Gateway built with C++20. It acts as a secure and
 *   **Request Security**: Validates JWT tokens at the edge and injects verified user identity into backend request headers.
 *   **Real-Time Monitoring**: Includes a React-based dashboard for live tracking of traffic, success rates, and rate-limit events.
 *   **Background Logging**: Uses an asynchronous Kafka pipeline to record activity without slowing down user requests.
+*   **Identity Propagation**: Injects verified `X-User-ID` headers into backend requests, enabling seamless downstream authorization.
 
 ## Performance & Benchmarking
 We verified the system's performance using an asynchronous stress-testing suite:
@@ -21,6 +22,18 @@ The system implements an enterprise-grade traffic shaping strategy:
 *   **Algorithm**: Distributed **Token Bucket** algorithm (shared via Redis).
 *   **Burst Capacity**: Pre-configured for a **1,000-request burst** to handle traffic spikes.
 *   **Refill Rate**: 10 requests per second recovery following a burst.
+
+### D. Verify Identity Propagation
+You can witness the Gateway securely injecting user identities into backend services by watching the container logs:
+```bash
+# Watch backend audit logs
+docker compose logs -f user-service
+```
+**Observation**: When you run `load_test.py`, you will see lines like:
+`[AUDIT] Request authenticated for User: user123 | Handled by: user-service-8081`
+This confirms the Gateway is successfully performing edge authentication and propagating state.
+
+## 3. Observability Dashboard
 
 ## Tech Stack
 *   **Language**: C++20 (Boost.Asio, Boost.Beast)

@@ -31,6 +31,13 @@ python3 load_test.py
 ### C. Performance Benchmarking
 Verified stable throughput of **4,000+ Requests Per Second** (sustained) with sub-millisecond local processing latency.
 
+### D. Verify Identity Propagation
+To see the Gateway securely injecting User IDs into backend requests:
+1.  Open a new terminal and run: `docker compose logs -f user-service`
+2.  In another terminal, run: `python3 load_test.py`
+3.  **Result**: You will see authenticated requests arriving at the backend with clear user identities:
+    `[AUDIT] Request authenticated for User: user123 | Handled by: user-service-8081`
+
 ## 3. Observability Dashboard
 Access the real-time visualization at http://localhost:5173.
 

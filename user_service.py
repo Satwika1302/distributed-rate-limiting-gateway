@@ -37,18 +37,15 @@ def init_db():
     conn.close()
 
 def send_json(handler, status, data):
+    # Identity Propagation Audit Log
+    uid = handler.headers.get("X-User-ID", "anonymous")
+    print(f"[AUDIT] Request authenticated for User: {uid} | Handled by: user-service-{port}")
+    
     body = json.dumps(data, indent=2).encode()
     handler.send_response(status)
     handler.send_header("Content-Type", "application/json")
-    handler.send_header("Content-Length", str(len(body)))
     handler.send_header("X-Served-By", f"user-service-{port}")
-    
-    # Read Gateway-injected headers
-    uid = handler.headers.get("X-User-ID", "anonymous")
-    role = handler.headers.get("X-User-Role", "guest")
     handler.send_header("X-Authorized-User", uid)
-    handler.send_header("X-Authorized-Role", role)
-    
     handler.end_headers()
     handler.wfile.write(body)
 
