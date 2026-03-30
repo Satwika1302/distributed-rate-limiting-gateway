@@ -1,0 +1,80 @@
+version: '3.8'
+
+networks:
+  gateway-net:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    networks:
+      - gateway-net
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper
+    networks:
+      - gateway-net
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - gateway-net
+
+  # Initialize Kafka topics
+  init-kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - kafka
+    networks:
+      - gateway-net
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic gateway-logs --replication-factor 1 --partitions 1
+      "
+
+  # Python Microservices (Identity-Aware)
+  user-service:
+    image: python:3.10-slim
+    volumes:
+      - .:/app
+    working_dir: /app
+    networks:
+      - gateway-net
+    command: python3 user_service.py 8081
+
+  order-service:
+    image: python:3.10-slim
+    volumes:
+      - .:/app
+    working_dir: /app
+    networks:
+      - gateway-net
+    command: python3 order_service.py 9091
+
+  # High Performance C++ Gateway
+  gateway:
+    build:
+      context: ./distributed-rate-limiting-gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - user-service
+      - order-service
+    networks:
+      - gateway-net
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_URL=tcp://redis:6379 
+      - KAFKA_BROKERS=kafka:9092

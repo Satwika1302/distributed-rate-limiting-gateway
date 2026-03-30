@@ -1,0 +1,24 @@
+# Dependency Directories
+distributed-rate-limiting-gateway/build/
+dashboard/node_modules/
+dashboard/dist/
+__pycache__/
+*.pyc
+
+# Local Configuration & Data
+distributed-rate-limiting-gateway/config.json
+*.db
+*.log
+
+# IDE & System Files
+.DS_Store
+.vscode/
+.idea/
+
+# Agentic Brain (Do not push)
+task.md
+brain/
+.gemini/
+build/
+bin/
+obj/
