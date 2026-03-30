@@ -34,7 +34,7 @@ Verified stable throughput of **4,000+ Requests Per Second** (sustained) with su
 ## 3. Observability Dashboard
 Access the real-time visualization at http://localhost:5173.
 
-![Distributed Rate Limiting Gateway Console](file:///Users/satwikad/.gemini/antigravity/brain/5ef62c65-9075-433b-b644-aadb9aa8ef04/dashboard_initial_view_1774466158092.png)
+![Distributed Rate Limiting Gateway Console](file:/Users/satwikad/Desktop/Screenshot 2026-03-30 at 1.24.57 PM.png)
 
 ---
 **Final Status**: System stabilized, benchmarked at 5,000+ RPS, and ready for GitHub release.
